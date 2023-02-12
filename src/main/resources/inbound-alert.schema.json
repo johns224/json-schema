@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.usbank.com/inbound-alert.schema.json",
+  "title": "Inbound Customer Alert",
+  "description": "Alert generated from core processing system to be sent to customer via email, SMS, push, etc.",
+  "type": "object",
+  "definitions": {
+    "alert": {
+      "type": "object",
+      "properties": {
+        "customer-id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "destination-phone-number": {
+          "type": "string"
+        },
+        "alert-type": {
+          "enum": [
+            "email",
+            "sms",
+            "push"
+          ]
+        }
+      },
+      "required": [
+        "alert-type",
+        "message",
+        "customer-id"
+      ],
+      "anyOf": [
+        {
+          "properties": {
+            "alert-type": {
+              "const": "email"
+            }
+          },
+          "required": [
+            "email"
+          ]
+        },
+        {
+          "properties": {
+            "alert-type": { "const":  "push" }
+          }
+        },
+        {
+          "properties": {
+            "alert-type": {
+              "const": "sms"
+            }
+          },
+          "required": [
+            "destination-phone-number"
+          ]
+        }
+      ]
+    }
+  },
+  "properties": {
+    "alert": {
+      "$ref": "#/definitions/alert",
+      "description": "Customer alert"
+    }
+  },
+  "required": [
+    "alert"
+  ]
+}
+
